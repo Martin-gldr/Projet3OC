@@ -38,65 +38,31 @@ btnTous.id = 0
 
 divCategories.appendChild(btnTous)
 
-// creation des boutons catégories 
+// creation des boutons catégories et filtre
+
 for(let i = 0; i<categories.length;i++){
     const divCategories = document.querySelector(".categories");
     const BtnElement = document.createElement("button");
     BtnElement.innerText = categories[i].name;
-    BtnElement.id = `btn.${categories[i].name}`;
+    BtnElement.id = categories[i].name;
     BtnElement.classList.add("btnHomePage");
-
-    divCategories.appendChild(BtnElement)
+    divCategories.appendChild(BtnElement);
+    
+    BtnElement.addEventListener("click",()=>{
+   const worksFiltree = works.filter(function(work){
+        return work.categoryId === categories[i].id });
+        document.querySelector(".gallery").innerHTML="";
+        genererWorks(worksFiltree);
+        let btnliste = document.querySelectorAll("button");
+        for(let i=0; i<btnliste.length;i++){
+                btnliste[i].classList.remove("btnSelected")
+        };
+        BtnElement.classList.toggle("btnSelected")
+    })
 }
 
-// Filtre par catégorie
 
-const btnObjet = document.getElementById("btn.Objets")
-btnObjet.addEventListener("click",()=>{
-   const worksObjet = works.filter(function(work){
-    return work.categoryId === 1
-   });
-    document.querySelector(".gallery").innerHTML="";
-    genererWorks(worksObjet)
-    //gestion style btn
-        btnObjet.classList.remove("btnSelected") ;
-        btnAppartements.classList.remove("btnSelected") ;
-        btnHotelsRestorants.classList.remove("btnSelected") ;
-        btnTous.classList.remove("btnSelected") ;
-        btnObjet.classList.toggle("btnSelected")
-})
-
-const btnAppartements = document.getElementById("btn.Appartements")
-btnAppartements.addEventListener("click",()=>{
-   const worksAppartements = works.filter(function(work){
-    return work.categoryId === 2
-   });
-    document.querySelector(".gallery").innerHTML="";
-    genererWorks(worksAppartements);
-    // gestion style btn
-        btnObjet.classList.remove("btnSelected") ;
-        btnAppartements.classList.remove("btnSelected") ;
-        btnHotelsRestorants.classList.remove("btnSelected") ;
-        btnTous.classList.remove("btnSelected") ;
-        btnAppartements.classList.toggle("btnSelected")
-})
-    
-
-const btnHotelsRestorants = document.getElementById("btn.Hotels & restaurants")
-btnHotelsRestorants.addEventListener("click",()=>{
-   const worksHotelsRestaurants = works.filter(function(work){
-    return work.categoryId === 3
-   });
-    document.querySelector(".gallery").innerHTML="";
-    genererWorks(worksHotelsRestaurants);
-    // gestion style btn
-        btnObjet.classList.remove("btnSelected") ;
-        btnAppartements.classList.remove("btnSelected") ;
-        btnHotelsRestorants.classList.remove("btnSelected") ;
-        btnTous.classList.remove("btnSelected") ;
-        btnHotelsRestorants.classList.toggle("btnSelected")
-})
-
+//btn tous 
 
 btnTous.addEventListener("click",()=>{
    const worksTous = works.filter(function(work){
@@ -104,10 +70,9 @@ btnTous.addEventListener("click",()=>{
    });
     document.querySelector(".gallery").innerHTML="";
     genererWorks(worksTous);
-    // gestion style btn
-        btnObjet.classList.remove("btnSelected") ;
-        btnAppartements.classList.remove("btnSelected") ;
-        btnHotelsRestorants.classList.remove("btnSelected") ;
-        btnTous.classList.remove("btnSelected") ;
-        btnTous.classList.toggle("btnSelected")
-})
+    let btnliste = document.querySelectorAll("button");
+        for(let i=0; i<btnliste.length;i++){
+                btnliste[i].classList.remove("btnSelected")
+        };
+    btnTous.classList.toggle("btnSelected")
+}) 
