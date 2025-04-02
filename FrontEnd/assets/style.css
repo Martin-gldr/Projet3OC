@@ -124,8 +124,25 @@ li:hover {
 .categories {
 	display: flex;
 	flex-direction: row;
-	gap : 10px
+	gap : 10px;
+	justify-content: center;
+	margin-bottom: 50px ;
 }
+.btnHomePage{
+	border: 1px #1D6154 solid;
+	color: #1D6154;
+	background-color: white;
+	border-radius: 60px;
+	font-weight: 700;
+	font-size: 16px;
+	padding: 8px 19px ;
+
+}
+.btnHomePage:hover{
+	background-color: #1D6154;
+	color: white;
+}
+
 #portfolio h2 {
 	text-align: center;
 	margin-bottom: 1em;

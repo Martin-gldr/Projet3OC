@@ -21,7 +21,21 @@ figureElment.appendChild(imgElement)
 figureElment.appendChild(titleElement)
 }
 
-// creation des boutons catégories 
+// ajout catégorie "tous"
+const divCategories = document.querySelector(".categories");
+const btnTous = document.createElement("button");
+btnTous.innerText ="Tous"
+btnTous.classList.add("btnHomePage")
 
+divCategories.appendChild(btnTous)
+// creation des boutons catégories 
+for(let i = 0; i<categories.length;i++){
+    const divCategories = document.querySelector(".categories");
+    const BtnElement = document.createElement("button");
+    BtnElement.innerText = categories[i].name;
+    BtnElement.classList.add("btnHomePage")
+
+    divCategories.appendChild(BtnElement)
+}
 
 
