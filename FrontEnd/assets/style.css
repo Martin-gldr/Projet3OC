@@ -121,6 +121,11 @@ li:hover {
 #introduction p {
 	margin-bottom: 0.5em;
 }
+.categories {
+	display: flex;
+	flex-direction: row;
+	gap : 10px
+}
 #portfolio h2 {
 	text-align: center;
 	margin-bottom: 1em;
@@ -136,6 +141,13 @@ li:hover {
 .gallery img {
 	width: 100%;
 
+}
+.gallery figcaption{
+	font-size: 13px ;
+	text-align: center;
+	font-weight: 400;
+	margin-top: 5px;
+	color: #3d3d3d;
 }
 #contact {
 	width: 50%;
