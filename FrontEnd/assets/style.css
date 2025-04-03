@@ -30,10 +30,16 @@ footer, header, hgroup, menu, nav, section {
 }
 body {
 	line-height: 1;
+	background-color:#FFFEF8;
 }
 ol, ul {
 	list-style: none;
 }
+a{
+	text-decoration: none;
+	color: black;
+}
+
 blockquote, q {
 	quotes: none;
 }
@@ -47,11 +53,14 @@ table {
 	border-spacing: 0;
 }
 /** end reset css**/
-body {
+.blocPrincipalIndex, .blocPrincipal {
 	max-width: 1140px;
 	margin:auto;
 	font-family: 'Work Sans' ;
 	font-size: 14px;
+}
+a:hover{
+	color: #B1663C;
 }
 header {
 	display: flex;
@@ -174,13 +183,17 @@ li:hover {
 	width: 50%;
 margin: auto;
 }
+
 #contact > * {
 	text-align: center;
 
 }
+
 #contact h2{
 	margin-bottom: 20px;
 }
+
+
 #contact form {
 	text-align: left;
 	margin-top:30px;
@@ -194,9 +207,11 @@ margin: auto;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
+
 #contact label {
 	margin: 2em 0 1em 0;
 }
+
 #contact textarea {
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
@@ -216,6 +231,53 @@ input[type="submit"]{
 footer nav ul {
 	display: flex;
 	justify-content: flex-end;
-	margin: 2em
+}
+footer nav ul li {
+	margin-top: 24px;
+	font-size: 16px;
+	color: #000000;
+}
+Footer{
+	height: 60px;
+	background-color: white;
+	width: 100%;
+	max-width: 100%;
 }
 
+
+/****** LOGIN*******/
+
+
+#logIn label {
+	margin: 2em 0 1em 0;
+}
+#logIn input {
+	height: 50px;
+	font-size: 1.2em;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+#logIn form {
+	text-align: left;
+	margin-top:30px;
+	display: flex;
+	flex-direction: column;
+}
+#logIn h2{
+	margin-bottom: 20px;
+	font-size: 30px;
+}
+#logIn {
+	text-align: center;
+}
+.mdpOublie{
+	text-decoration: underline;
+}
+#logIn {
+	width: 50%;
+margin: auto;
+}
+
+.blocPrincipal{
+	min-height: calc(100vh - 60px);
+}
