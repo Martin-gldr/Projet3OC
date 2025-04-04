@@ -17,6 +17,7 @@ const login = {
     }).then((reponse)=> {return reponse.json()})
     .then((user)=>{console.log(user);
         if (user.userId === 1){
+            window.localStorage.setItem("token",user.token);
             location.href="./index.html"
         }else if(user.message === "user not found"){
             divMsgErreur.innerHTML=" "
@@ -34,3 +35,4 @@ const login = {
     });
     
 });
+

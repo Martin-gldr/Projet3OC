@@ -76,3 +76,6 @@ btnTous.addEventListener("click",()=>{
         };
     btnTous.classList.toggle("btnSelected")
 }) 
+
+const userIn = window.localStorage.getItem("token")
+console.log(userIn)
