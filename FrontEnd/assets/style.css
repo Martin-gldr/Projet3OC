@@ -259,7 +259,7 @@ Footer{
 }
 #logIn form {
 	text-align: left;
-	margin-top:30px;
+	margin-top:16px;
 	display: flex;
 	flex-direction: column;
 }
@@ -280,4 +280,13 @@ margin: auto;
 
 .blocPrincipal{
 	min-height: calc(100vh - 60px);
+}
+.erreur p {
+	color: red;
+	font-weight: 700;
+	margin-bottom: 0;
+}
+.erreur .initial-msg{
+	font-weight: 700;
+	color: #FFFEF8;
 }
