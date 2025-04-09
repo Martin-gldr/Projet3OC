@@ -62,10 +62,13 @@ table {
 a:hover{
 	color: #B1663C;
 }
-header {
+.headerPrincipal {
 	display: flex;
 	justify-content: space-between;
-	margin: 50px 0
+	max-width: 1340px;
+	margin: auto;
+	margin-top: 50px;
+	font-family:'work Sans';
 }
 section {
 	margin: 50px 0
@@ -247,7 +250,10 @@ Footer{
 
 /****** LOGIN*******/
 
-
+nav ul #loginStrong{
+	font-weight:600;
+	font-size: 17px;
+}
 #logIn label {
 	margin: 2em 0 1em 0;
 }
@@ -289,4 +295,27 @@ margin: auto;
 .erreur .initial-msg{
 	font-weight: 700;
 	color: #FFFEF8;
+}
+/*** classes utiles ****/
+.hide{
+	display: none;
+}
+
+/*** Mode edition ***/
+.headerEdition{
+	background-color: black;
+	color: #FFFEF8;
+	text-align: center;
+	align-content: center;
+	height: 59px;
+}
+.editionMesProjets{
+	display: flex;
+	gap: 20px;
+	align-items: center;
+	justify-content: center;
+}
+.editionMesProjets a{
+	margin-bottom: 20px;
+	font-size: 16px;
 }

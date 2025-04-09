@@ -12,20 +12,25 @@
 	<script src="projets.js" type="module"></script>
 </head>
 <body>
-	<div class="blocPrincipalIndex">
-		<header>
+	<header>
+		<p class="headerEdition">Mode edition</p>
+		<div class="headerPrincipal">
 			<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
 			<nav>
 				<ul>
-					<li>projets</li>
+					<li>projets</li>					
 					<li>contact</li>
 					<li>
-						<a href="./login.html">login</a>
+						<a href="./login.html" id="loginLink">login</a>
+						<a id="logoutLink">logout</a>
 					</li>
-					<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
+					<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>				
 				</ul>
 			</nav>
-		</header>
+		</div>
+	</header>
+	<div class="blocPrincipalIndex">
+		
 		<main>
 			<section id="introduction">
 				<figure>
@@ -39,8 +44,10 @@
 				</article>
 			</section>
 			<section id="portfolio">
-				
-				<h2>Mes Projets</h2>
+				<div class="editionMesProjets">
+					<h2>Mes Projets</h2> 
+					<a>O Modifier</a>
+				</div>
 
 				<div class="categories">
 					
