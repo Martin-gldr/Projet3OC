@@ -1,3 +1,6 @@
+// import fonction pour la modal
+import { closeModal, genererPhoto, openModal } from "./modal.js";
+
 // import des projet en BDD => json
 const reponse = await fetch("http://localhost:5678/api/works");
 const works = await reponse.json();
@@ -15,6 +18,7 @@ const logoutLink = document.getElementById("logoutLink")
 // affichage mode edition 
 const headerEdition = document.querySelector(".headerEdition")
 const ModifierLink = document.querySelector(".editionMesProjets a")
+
 
 
 
@@ -104,6 +108,16 @@ if (userIn === null ){
         location.href="./index.html"
     })
 
-
+    // Gestion Modal 
+    ModifierLink.addEventListener("click",()=>{
+        openModal()
+        genererPhoto(works)
+    })
+    const BtnFermer = document.querySelector(".modal-wrapper button")
+    BtnFermer.addEventListener("click",closeModal)
 }
+
+
+
+
 
