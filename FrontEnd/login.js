@@ -18,6 +18,7 @@ const login = {
     .then((user)=>{console.log(user);
         if (user.userId === 1){
             window.localStorage.setItem("token",user.token);
+            window.localStorage.setItem("id",user.userId);
             location.href="./index.html"
         }else if(user.message === "user not found"){
             divMsgErreur.innerHTML=" "
