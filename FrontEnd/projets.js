@@ -1,5 +1,5 @@
 // import fonction pour la modal
-import { closeModal, genererPhoto, openModal, openAddModal } from "./modal.js";
+import { closeModal, genererPhoto, openModal, openAddModal, removePhoto } from "./modal.js";
 
 // import des projet en BDD => json
 const reponse = await fetch("http://localhost:5678/api/works");
@@ -118,18 +118,7 @@ if (userIn === null ){
         genererPhoto(works)
         console.log(UserID)
        
-        if (UserID === "1"){ 
-        let removeButtonListe = document.querySelectorAll(".removeButton")
-        for(let i=0; i<removeButtonListe.length;i++){
-            removeButtonListe[i].addEventListener("click",()=>{
-                console.log(removeButtonListe[i].id)
-            })
-        }}else if(UserID != 1){
-            for(let i=0; i<removeButtonListe.length;i++){
-                removeButtonListe[i].addEventListener("click",()=>{
-                    console.log("Vous n'etes pas administrateur")
-                })
-        }}
+        removePhoto()
         
     })
     

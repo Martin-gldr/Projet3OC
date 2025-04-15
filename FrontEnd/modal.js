@@ -1,3 +1,14 @@
+// données 
+const reponseCategories = await fetch("http://localhost:5678/api/categories")
+const categories = await reponseCategories.json();
+
+const reponse = await fetch("http://localhost:5678/api/works");
+const works = await reponse.json();
+const UserID = window.localStorage.getItem("id")
+console.log(UserID)
+
+
+// fonctions pour la modal
 export function openModal (){ 
     const modal = document.querySelector(".modal")
     modal.style.display = null 
@@ -11,7 +22,7 @@ export function openModal (){
     addPhotoBtn.innerText="Ajouter une photo"
 
     addPhotoBtn.addEventListener("click",openAddModal)
-    const BtnFermer = document.querySelector(".modal-wrapper button")
+    const BtnFermer = document.querySelector(".modal-close-button")
     BtnFermer.addEventListener("click",closeModal)
     
    
@@ -25,10 +36,12 @@ export function closeModal(){
     
     const modal = document.querySelector(".modal");
     modal.style.display = "none";
+    const backBtn=document.querySelector(".modal-back-button")
+    backBtn.style.display = "none";
     modal.removeEventListener("click", closeModal)
     const addPhotoBtn = document.querySelector(".modal-end-button")
     addPhotoBtn.removeEventListener("click",openAddModal)
-    const BtnFermer = document.querySelector(".modal-wrapper button")
+    const BtnFermer = document.querySelector(".modal-close-button")
     BtnFermer.removeEventListener("click",closeModal)
     clearModal()
 }
@@ -59,7 +72,21 @@ export function genererPhoto(works){
         
 
 }
-export function removePhoto(works){
+export function removePhoto(){
+    if (UserID === "1"){ 
+    let removeButtonListe = document.querySelectorAll(".removeButton")
+    for(let i=0; i<removeButtonListe.length;i++){
+        removeButtonListe[i].addEventListener("click",()=>{
+            console.log(removeButtonListe[i].id)
+
+        })
+    }}else if(UserID != 1){
+        for(let i=0; i<removeButtonListe.length;i++){
+            removeButtonListe[i].addEventListener("click",()=>{
+                console.log("Vous n'etes pas administrateur")
+        })
+    }
+}
 
 }
 export function clearModal(){
@@ -80,7 +107,19 @@ export function openAddModal(){
     modalTitle.innerHTML='Ajout Photo'
     const btnValider = document.querySelector(".modal-end-button")
     btnValider.removeEventListener("click",openAddModal)
-    btnValider.innerText = "Valdier"
+    btnValider.innerText = "Valider"
+    const backBtn=document.querySelector(".modal-back-button")
+    backBtn.style.display = null
+
+    //fonction du bouton back
+    backBtn.addEventListener("click",()=>{
+        backBtn.style.display="none"
+        clearModal()
+        openModal()
+        genererPhoto(works)
+        removePhoto()
+        
+    })
 
     // creation des élément de la modal ajout 
     const BodyModal = document.getElementById("modalBody")
@@ -98,9 +137,36 @@ export function openAddModal(){
     imgAdd.appendChild(imgAddbtn)
     imgAdd.appendChild(imgAddText)
     //le form 
-    //la liste déroulante
+   
+    const addForm = document.createElement("form")
+    let addInput = document.createElement("input")
+    addInput.type="text"
+    addInput.name="titre"
+    addInput.id="titre"
+    let labelInupt = document.createElement("label")
+    labelInupt.innerText="Titre"
+    addForm.appendChild(labelInupt)
+    addForm.appendChild(addInput)
     
-    BodyModal.appendChild(imgAdd)
+    //la liste déroulante
+    let selectCatégorie = document.createElement("select")
+    selectCatégorie.id="catégorie"
+    selectCatégorie.name="catégorie"
+    const labelSelect = document.createElement("label")
+    labelSelect.innerText="Catégorie"
 
+    
+    for(let i=0; i<categories.length;i++){
+        let optionCatégorie = document.createElement("option")
+        optionCatégorie.value =categories[i].name
+        optionCatégorie.innerText=categories[i].name
+        selectCatégorie.appendChild(optionCatégorie)
+    }
+    addForm.append(labelSelect)
+    addForm.appendChild(selectCatégorie)
+    // lien vers la div principale
+
+    BodyModal.appendChild(imgAdd)
+    BodyModal.appendChild(addForm)
 
 }
