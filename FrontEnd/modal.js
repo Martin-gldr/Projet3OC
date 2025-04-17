@@ -6,6 +6,8 @@ const reponse = await fetch("http://localhost:5678/api/works");
 const works = await reponse.json();
 const UserID = window.localStorage.getItem("id")
 console.log(UserID)
+const userIn = window.localStorage.getItem("token")
+console.log(userIn)
 
 
 // fonctions pour la modal
@@ -78,6 +80,28 @@ export function removePhoto(){
     for(let i=0; i<removeButtonListe.length;i++){
         removeButtonListe[i].addEventListener("click",()=>{
             console.log(removeButtonListe[i].id)
+            let removeID = removeButtonListe[i].id
+            let url = "http://localhost:5678/api/works/"+removeID
+            console.log(url)
+            let token = userIn
+            console.log(token)
+
+            fetch(url,{
+                method:"DELETE",
+                headers:{
+                    'Autorization' : `Bearer ${token}`,
+                    'Content-Type' : 'application/json'
+                }
+
+                }).then(res => {
+                if (res.status===401){
+                    console.log("erreur401")
+                }else if(res.status===500){
+                    console.log("erreur500")
+                }else if(res.status===200){
+                    console.log("item supprimé")
+                }
+            })          
 
         })
     }}else if(UserID != 1){
@@ -129,12 +153,21 @@ export function openAddModal(){
     imgAdd.classList.add("ImgAddDiv")
     const imgAddLogo = document.createElement("img")
     imgAddLogo.src = "./assets/icons/instagram.png"
-    const imgAddbtn = document.createElement("button")
-    imgAddbtn.innerText="+ Ajouter photo"
+    imgAddLogo.classList.add("ImgAddLogo")
+    const imgAddLabel= document.createElement("label")
+    const imgAddSpan = document.createElement("span")
+    imgAddSpan.innerText="+ Ajouter photo"
+    const imgAddInput = document.createElement("input")
+    imgAddInput.type = "file"
+    imgAddInput.accept="image/jpeg, image/png"
+    imgAddInput.addEventListener('change',previewImage)
+    imgAddLabel.appendChild(imgAddSpan)
+    imgAddLabel.appendChild(imgAddInput)
+
     const imgAddText = document.createElement("p")
     imgAddText.innerText="jpg, png 4mo max"
     imgAdd.appendChild(imgAddLogo)
-    imgAdd.appendChild(imgAddbtn)
+    imgAdd.appendChild(imgAddLabel)
     imgAdd.appendChild(imgAddText)
     //le form 
    
@@ -168,5 +201,26 @@ export function openAddModal(){
 
     BodyModal.appendChild(imgAdd)
     BodyModal.appendChild(addForm)
+
+}
+
+function previewImage (e){
+    const input = e.target
+    const div = document.querySelector(".ImgAddDiv")
+    div.innerHTML=''
+    const image = document.createElement("img")
+    image.classList.add("previewImage")
+    div.appendChild(image)
+    const span = document.querySelector(".ImgAddDiv Span")
+
+    if(input.files && input.files[0]){
+        const reader = new FileReader();
+        reader.onload = function (e){
+            image.src = e.target.result
+
+        }
+        
+        reader.readAsDataURL(input.files[0])
+    }
 
 }

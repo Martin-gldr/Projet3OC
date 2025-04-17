@@ -14,26 +14,32 @@ const login = {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: chargeUtile
-    }).then((reponse)=> {return reponse.json()})
-    .then((user)=>{console.log(user);
-        if (user.userId === 1){
-            window.localStorage.setItem("token",user.token);
-            window.localStorage.setItem("id",user.userId);
-            location.href="./index.html"
-        }else if(user.message === "user not found"){
+    }).then(reponse => {
+        if (reponse.status === 404){
             divMsgErreur.innerHTML=" "
             const emailIncorrect = document.createElement("p");
             emailIncorrect.innerText = "Votre email n'a pas de compte associé";
             divMsgErreur.appendChild(emailIncorrect);
             console.log("erreur de mail")
-        }else { 
+
+        }else if (reponse.status === 401){
             divMsgErreur.innerHTML=" "
             const mdpIncorrect = document.createElement("p");
             mdpIncorrect.innerText = "mot de passe incorrect";
             divMsgErreur.appendChild(mdpIncorrect);
             console.log("erreur de mdp")
+
+        }else if(reponse.status=== 200){
+        return reponse.json().then((user)=>{console.log(user);
+       
+            window.localStorage.setItem("token",user.token);
+            window.localStorage.setItem("id",user.userId);
+            location.href="./index.html"
+        })
         }
-    });
+
+    })
+    
     
 });
 

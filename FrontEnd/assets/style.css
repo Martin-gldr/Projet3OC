@@ -419,33 +419,44 @@ margin: auto;
 	display: flex;
 	flex-direction: column;
 	background-color: #E8F1F6;
-	padding: 20px 50px;
+	padding: 0px 50px;
 	align-items: center;
-	gap:10px;
+	gap:20px;
 	margin : 20px 50px;
 
 }
-.ImgAddDiv button {
+.ImgAddDiv input {
+	display: none;
+}
+.ImgAddDiv span {
 	font-family: 'work Sans';
 	font-size: 14px;
 	font-weight: 500;
 	border-radius: 50px;
+	width: 150px;
 	color: #306685;
 	background-color: #CBD6DC;
 	padding: 8px 20px;
 	border: none;
 	cursor: pointer;
 }
+
+.ImgAddDiv span:hover{
+	background-color: #3d3d3d;
+}
+
 .ImgAddDiv p{
 	font-family: 'work Sans';
 	font-size: 10px;
 	font-weight: 400;
 	color: #444444;
+	margin-bottom: 20px;
 }
 
-.ImgAddDiv img{
+.ImgAddLogo{
 	height: 50px;
 	width: 50px;
+	margin-top: 20px;
 }
 
 .modal-wrapper form{
@@ -492,5 +503,9 @@ margin: auto;
 	font-family: 'Work Sans';
 }
 
+.previewImage{
+	width: 50%;
+	height: 70%;
+}
 
 
