@@ -1,9 +1,11 @@
+import { genererWorks } from "./projets.js";
+
 // données 
 const reponseCategories = await fetch("http://localhost:5678/api/categories")
 const categories = await reponseCategories.json();
 
-const reponse = await fetch("http://localhost:5678/api/works");
-const works = await reponse.json();
+let reponse = await fetch("http://localhost:5678/api/works");
+let works = await reponse.json();
 const UserID = window.localStorage.getItem("id")
 console.log(UserID)
 const userIn = window.localStorage.getItem("token")
@@ -25,8 +27,7 @@ export function openModal (){
 
     addPhotoBtn.addEventListener("click",openAddModal)
     const BtnFermer = document.querySelector(".modal-close-button")
-    BtnFermer.addEventListener("click",closeModal)
-    
+    BtnFermer.addEventListener("click",closeModal)    
    
 }
 
@@ -34,7 +35,7 @@ function stopPropagation(e){
     e.stopPropagation()
 }
 
-export function closeModal(){
+export async function closeModal(){
     
     const modal = document.querySelector(".modal");
     modal.style.display = "none";
@@ -49,9 +50,10 @@ export function closeModal(){
 }
 
 export function genererPhoto(works){
-    
+    const galleryImage = document.getElementById("modalBody");
+
     for(let i = 0; i< works.length; i++){
-        const galleryImage = document.getElementById("modalBody");
+        
         const imageElment = document.createElement("Image");
 
 
@@ -75,7 +77,6 @@ export function genererPhoto(works){
 
 }
 export function removePhoto(){
-    if (UserID === "1"){ 
     let removeButtonListe = document.querySelectorAll(".removeButton")
     for(let i=0; i<removeButtonListe.length;i++){
         removeButtonListe[i].addEventListener("click",()=>{
@@ -89,29 +90,28 @@ export function removePhoto(){
             fetch(url,{
                 method:"DELETE",
                 headers:{
-                    'Autorization' : `Bearer ${token}`,
+                    'Authorization' : `Bearer ${token}`,
                     'Content-Type' : 'application/json'
                 }
 
-                }).then(res => {
+                }).then(async res => {
                 if (res.status===401){
                     console.log("erreur401")
                 }else if(res.status===500){
                     console.log("erreur500")
-                }else if(res.status===200){
-                    console.log("item supprimé")
-                }
-            })          
+                }else if(res.status<300){
+                    const reponse = await fetch("http://localhost:5678/api/works");
+                    const newWorks = await reponse.json();
+                    const galleryImage = document.getElementById("modalBody");
+                    galleryImage.innerHTML=''
+                    genererPhoto(newWorks)
+                    removePhoto()
+                    genererWorks(newWorks)
+                    works = newWorks
+                }})          
 
-        })
-    }}else if(UserID != 1){
-        for(let i=0; i<removeButtonListe.length;i++){
-            removeButtonListe[i].addEventListener("click",()=>{
-                console.log("Vous n'etes pas administrateur")
         })
     }
-}
-
 }
 export function clearModal(){
     const modalWrapper = document.querySelector(".modal-wrapper")
@@ -201,7 +201,6 @@ export function openAddModal(){
 
     BodyModal.appendChild(imgAdd)
     BodyModal.appendChild(addForm)
-
 }
 
 function previewImage (e){
@@ -224,3 +223,4 @@ function previewImage (e){
     }
 
 }
+

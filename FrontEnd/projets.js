@@ -1,9 +1,11 @@
 // import fonction pour la modal
-import { closeModal, genererPhoto, openModal, openAddModal, removePhoto } from "./modal.js";
+import { genererPhoto, openModal, removePhoto } from "./modal.js";
 
 // import des projet en BDD => json
-const reponse = await fetch("http://localhost:5678/api/works");
-const works = await reponse.json();
+let reponse = await fetch("http://localhost:5678/api/works");
+let works = await reponse.json();
+
+
 // recupération des catégories 
 const reponseCategories = await fetch("http://localhost:5678/api/categories")
 const categories = await reponseCategories.json();
@@ -24,9 +26,12 @@ const ModifierLink = document.querySelector(".editionMesProjets a")
 
 
 // creation des cards des projet 
-function genererWorks (works){
-    for(let i = 0; i< works.length; i++){
+export function genererWorks (works){ 
     const gallery = document.querySelector(".gallery")
+    gallery.innerHTML=''
+
+    for(let i = 0; i< works.length; i++){
+   
     const figureElment = document.createElement("figure")
 
 
@@ -73,7 +78,7 @@ if (userIn === null ){
             divCategories.appendChild(BtnElement);
             
             BtnElement.addEventListener("click",()=>{
-        const worksFiltree = works.filter(function(work){
+                const worksFiltree = works.filter(function(work){
                 return work.categoryId === categories[i].id });
                 document.querySelector(".gallery").innerHTML="";
                 genererWorks(worksFiltree);
@@ -112,27 +117,15 @@ if (userIn === null ){
     })
 
     // Gestion Modal 
-    ModifierLink.addEventListener("click",()=>{
-        
+    ModifierLink.addEventListener("click",async ()=>{
+        const reponse = await fetch("http://localhost:5678/api/works");
+        const newWorks = await reponse.json();
         openModal()
-        genererPhoto(works)
         console.log(UserID)
-       
+        genererPhoto(newWorks)
         removePhoto()
         
     })
-    
-    
-   
-
-   
-
-    
-
-
-    
-    
-
     
 }
 
