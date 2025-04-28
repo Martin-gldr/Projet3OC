@@ -1,5 +1,5 @@
 // import fonction pour la modal
-import { genererPhoto, openModal, removePhoto } from "./modal.js"
+import { genererModalPhoto, openModal, removePhoto } from "./modal.js"
 
 // import des projet en BDD => json
 let reponse = await fetch("http://localhost:5678/api/works")
@@ -11,16 +11,15 @@ const reponseCategories = await fetch("http://localhost:5678/api/categories")
 const categories = await reponseCategories.json()
 
 
-const userIn = window.localStorage.getItem("token")
-console.log(userIn)
-const UserID = window.localStorage.getItem("id")
-console.log(UserID)
+const tokenIn = window.localStorage.getItem("token")
+const userID = window.localStorage.getItem("id")
+
 // login ou logout 
 const loginLink = document.getElementById("loginLink")
 const logoutLink = document.getElementById("logoutLink")
 // affichage mode edition 
 const headerEdition = document.querySelector(".headerEdition")
-const ModifierLink = document.querySelector(".editionMesProjets a")
+const modifierLink = document.querySelector(".editionMesProjets a")
 
 
 
@@ -39,7 +38,7 @@ export function genererWorks(works) {
         imgElement.src = works[i].imageUrl
         let titleElement = document.createElement("figcaption")
         titleElement.innerText = works[i].title
-        // figureElment.categoriesId = works[i].categoryId
+    
 
         gallery.appendChild(figureElment)
         figureElment.appendChild(imgElement)
@@ -50,13 +49,13 @@ genererWorks(works)
 
 
 
-if (userIn === null) {
+if (tokenIn === null) {
 
-
+    //affichage mode normal
     loginLink.classList.remove("hide")
     logoutLink.classList.add("hide")
     headerEdition.classList.add("hide")
-    ModifierLink.classList.add("hide")
+    modifierLink.classList.add("hide")
 
     // CATEGORIES
 
@@ -71,23 +70,23 @@ if (userIn === null) {
     // creation des boutons catégories et filtre
     for (let i = 0; i < categories.length; i++) {
         const divCategories = document.querySelector(".categories")
-        const BtnElement = document.createElement("button")
-        BtnElement.innerText = categories[i].name
-        BtnElement.id = categories[i].name
-        BtnElement.classList.add("btnHomePage")
-        divCategories.appendChild(BtnElement)
+        const btnElement = document.createElement("button")
+        btnElement.innerText = categories[i].name
+        btnElement.id = categories[i].name
+        btnElement.classList.add("btnHomePage")
+        divCategories.appendChild(btnElement)
 
-        BtnElement.addEventListener("click", () => {
+        btnElement.addEventListener("click", () => {
             const worksFiltree = works.filter(function (work) {
                 return work.categoryId === categories[i].id
             });
             document.querySelector(".gallery").innerHTML = ""
             genererWorks(worksFiltree)
-            let btnliste = document.querySelectorAll("button")
-            for (let i = 0; i < btnliste.length; i++) {
-                btnliste[i].classList.remove("btnSelected")
+            let btnListe = document.querySelectorAll("button")
+            for (let i = 0; i < btnListe.length; i++) {
+                btnListe[i].classList.remove("btnSelected")
             };
-            BtnElement.classList.toggle("btnSelected")
+            btnElement.classList.toggle("btnSelected")
         })
     }
 
@@ -104,26 +103,24 @@ if (userIn === null) {
         btnTous.classList.toggle("btnSelected")
     })
 
-} else if (userIn != null) {
-    ModifierLink.classList.remove("hide")
+} else if (tokenIn != null) {
+    // affichage mode édition
+    modifierLink.classList.remove("hide")
     headerEdition.classList.remove("hide")
     logoutLink.classList.remove("hide")
     loginLink.classList.add("hide")
     logoutLink.addEventListener("click", () => {
         window.localStorage.removeItem("token")
         window.localStorage.removeItem("id")
-        console.log(userIn)
-        console.log(UserID)
         location.href = "./index.html"
     })
 
     // Gestion Modal 
-    ModifierLink.addEventListener("click", async () => {
+    modifierLink.addEventListener("click", async () => {
         const reponse = await fetch("http://localhost:5678/api/works")
         const newWorks = await reponse.json()
         openModal()
-        console.log(UserID)
-        genererPhoto(newWorks)
+        genererModalPhoto(newWorks)
         removePhoto()
 
     })

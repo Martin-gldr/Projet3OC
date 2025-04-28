@@ -6,10 +6,9 @@ const categories = await reponseCategories.json()
 
 let reponse = await fetch("http://localhost:5678/api/works")
 let works = await reponse.json();
-const UserID = window.localStorage.getItem("id")
-console.log(UserID)
-const userIn = window.localStorage.getItem("token")
-console.log(userIn)
+const userId = window.localStorage.getItem("id")
+
+const tokenIn = window.localStorage.getItem("token")
 
 
 // fonctions pour la modal
@@ -24,19 +23,19 @@ export function openModal() {
     modalBody.classList.add("galleryImage")
     modal.addEventListener("click", closeModal)
     modal.querySelector(".modal-wrapper").addEventListener("click", stopPropagation)
-    const addPhotoBtn = document.querySelector(".modal-end-button")
-    addPhotoBtn.innerText = "Ajouter une photo"
+    const modalEndBtn = document.querySelector(".modal-end-button")
+    modalEndBtn.innerText = "Ajouter une photo"
 
-    addPhotoBtn.addEventListener("click", openAddModal)
-    const BtnFermer = document.querySelector(".modal-close-button")
-    BtnFermer.addEventListener("click", closeModal)
+    modalEndBtn.addEventListener("click", openAddModal)
+    const modalCloseBtn = document.querySelector(".modal-close-button")
+    modalCloseBtn.addEventListener("click", closeModal)
 
 }
-
+// gestion du click qui ferme
 function stopPropagation(e) {
     e.stopPropagation()
 }
-
+// gestion fermeture modal
 export async function closeModal() {
 
     const modal = document.querySelector(".modal");
@@ -44,16 +43,16 @@ export async function closeModal() {
     const backBtn = document.querySelector(".modal-back-button")
     backBtn.style.display = "none";
     modal.removeEventListener("click", closeModal)
-    const addPhotoBtn = document.querySelector(".modal-end-button")
-    addPhotoBtn.removeEventListener("click", openAddModal)
-    addPhotoBtn.classList.remove("arret")
-    const BtnFermer = document.querySelector(".modal-close-button")
-    BtnFermer.removeEventListener("click", closeModal)
+    const modalEndBtn = document.querySelector(".modal-end-button")
+    modalEndBtn.removeEventListener("click", openAddModal)
+    modalEndBtn.classList.remove("arret")
+    const modalCloseBtn = document.querySelector(".modal-close-button")
+    modalCloseBtn.removeEventListener("click", closeModal)
     clearModal()
 }
-
-export function genererPhoto(works) {
-    const galleryImage = document.getElementById("modalBody")
+// creer les photo dans la modal
+export function genererModalPhoto(works) {
+    const modalBody = document.getElementById("modalBody")
 
     for (let i = 0; i < works.length; i++) {
 
@@ -71,7 +70,7 @@ export function genererPhoto(works) {
         trashElement.classList.add("removeButton")
         trashElement.id = works[i].id
 
-        galleryImage.appendChild(imageElment)
+        modalBody.appendChild(imageElment)
         imageElment.appendChild(trashElement)
         imageElment.appendChild(imgElement)
 
@@ -80,16 +79,14 @@ export function genererPhoto(works) {
 
 
 }
+// gestion suppression des photos dans la modal + dans la BDD
 export function removePhoto() {
     let removeButtonListe = document.querySelectorAll(".removeButton")
     for (let i = 0; i < removeButtonListe.length; i++) {
         removeButtonListe[i].addEventListener("click", () => {
-            console.log(removeButtonListe[i].id)
             let removeID = removeButtonListe[i].id
             let url = "http://localhost:5678/api/works/" + removeID
-            console.log(url)
-            let token = userIn
-            console.log(token)
+            let token = tokenIn
 
             fetch(url, {
                 method: "DELETE",
@@ -100,15 +97,15 @@ export function removePhoto() {
 
             }).then(async res => {
                 if (res.status === 401) {
-                    console.log("erreur401")
+                   
                 } else if (res.status === 500) {
-                    console.log("erreur500")
+                    
                 } else if (res.status < 300) {
                     const reponse = await fetch("http://localhost:5678/api/works")
                     const newWorks = await reponse.json();
                     const galleryImage = document.getElementById("modalBody")
                     galleryImage.innerHTML = ''
-                    genererPhoto(newWorks)
+                    genererModalPhoto(newWorks)
                     removePhoto()
                     genererWorks(newWorks)
                     works = newWorks
@@ -118,26 +115,29 @@ export function removePhoto() {
         })
     }
 }
+// fonction pour nettoyer la modal
 export function clearModal() {
     const modalWrapper = document.querySelector(".modal-wrapper")
-    const galleryImage = document.getElementById("modalBody");
-    galleryImage.innerHTML = ''
+    const modalBody = document.getElementById("modalBody");
+    modalBody.innerHTML = ''
     const modalTitle = modalWrapper.querySelector(".modal-wrapper h2")
     modalTitle.innerHTML = ''
-    const modalWrapperBtn = document.querySelectorAll(".modal-end-button")
-    modalWrapperBtn.innerHTML = ''
+    const modalEndBtn = document.querySelector(".modal-end-button") 
+    modalEndBtn.removeEventListener("click",postPhoto)
+    modalEndBtn.innerHTML = ''
 
 }
-
+// gestion de la partie ajout photo
 export function openAddModal() {
     clearModal()
-    console.log("ok")
+    // affichage
     const modalTitle = document.querySelector(".modal h2")
     modalTitle.innerHTML = 'Ajout Photo'
-    const btnValider = document.querySelector(".modal-end-button")
-    btnValider.removeEventListener("click", openAddModal)
-    btnValider.innerText = "Valider"
-    btnValider.classList.add("arret")
+    const modalEndBtn = document.querySelector(".modal-end-button")
+    modalEndBtn.removeEventListener("click", openAddModal)
+   
+    modalEndBtn.innerText = "Valider"
+    modalEndBtn.classList.add("arret")
     const backBtn = document.querySelector(".modal-back-button")
     backBtn.style.display = null
 
@@ -145,19 +145,19 @@ export function openAddModal() {
     backBtn.addEventListener("click", () => {
         backBtn.style.display = "none"
         clearModal()
-        btnValider.classList.remove("arret")
+        modalEndBtn.classList.remove("arret")
         openModal()
-        genererPhoto(works)
+        genererModalPhoto(works)
         removePhoto()
 
     })
 
     // creation des élément de la modal ajout 
-    const BodyModal = document.getElementById("modalBody")
-    BodyModal.classList.remove("galleryImage")
+    const modalBody = document.getElementById("modalBody")
+    modalBody.classList.remove("galleryImage")
     // div ajout image
-    const imgAdd = document.createElement("div")
-    imgAdd.classList.add("ImgAddDiv")
+    const imgAddDiv = document.createElement("div")
+    imgAddDiv.classList.add("ImgAddDiv")
     const imgAddLogo = document.createElement("img")
     imgAddLogo.src = "./assets/icons/Vector-4.png"
     imgAddLogo.classList.add("ImgAddLogo")
@@ -174,21 +174,21 @@ export function openAddModal() {
 
     const imgAddText = document.createElement("p")
     imgAddText.innerText = "jpg, png: 4mo max"
-    imgAdd.appendChild(imgAddLogo)
-    imgAdd.appendChild(imgAddLabel)
-    imgAdd.appendChild(imgAddText)
+    imgAddDiv.appendChild(imgAddLogo)
+    imgAddDiv.appendChild(imgAddLabel)
+    imgAddDiv.appendChild(imgAddText)
     //le form 
 
     const addForm = document.createElement("form")
     addForm.id = "addForm"
-    addForm.appendChild(imgAdd)
+    addForm.appendChild(imgAddDiv)
     let addInput = document.createElement("input")
     addInput.type = "text"
     addInput.name = "title"
     addInput.id = "title"
-    let labelInupt = document.createElement("label")
-    labelInupt.innerText = "Titre"
-    addForm.appendChild(labelInupt)
+    let labelAddInupt = document.createElement("label")
+    labelAddInupt.innerText = "Titre"
+    addForm.appendChild(labelAddInupt)
     addForm.appendChild(addInput)
 
     //la liste déroulante
@@ -214,12 +214,13 @@ export function openAddModal() {
     // lien vers la div principale
 
 
-    BodyModal.appendChild(addForm)
+    modalBody.appendChild(addForm)
 
     addPhoto()
 }
-
+// fonction pour previsualiser l'image 
 function previewImage(e) {
+    // gestion affichage
     const input = e.target
     const div = document.querySelector(".ImgAddDiv")
     const divLogo = document.querySelector(".ImgAddDiv img")
@@ -234,6 +235,7 @@ function previewImage(e) {
     image.classList.add("previewImage")
     div.appendChild(image)
     const span = document.querySelector(".ImgAddDiv Span")
+    // fonction pour lire le fichier
 
     if (input.files && input.files[0]) {
         const reader = new FileReader()
@@ -246,22 +248,24 @@ function previewImage(e) {
     }
 
 }
-
+// gestion de l'ajout d'une image 
 function addPhoto() {
     const inputTitre = document.getElementById("title")
     const inputPhoto = document.querySelector(".ImgAddDiv input")
-    const btnValider = document.querySelector(".modal-end-button")
+    const modalEndBtn = document.querySelector(".modal-end-button")
     let titreValide = false
     let photoValide = false
 
-    inputTitre.addEventListener("change", () => {
+    // verifier si les champs sont remplis
+    inputTitre.addEventListener("keyup", () => {
         if (inputTitre.value === "") {
             titreValide = false
-            btnValider.classList.add("arret")
+            modalEndBtn.classList.add("arret")
         } else if (inputTitre.value != "") {
             titreValide = true
             if (titreValide === true && photoValide === true) {
-                postPhoto()
+               modalEndBtn.classList.remove("arret")
+               modalEndBtn.addEventListener("click", postPhoto)
             }
         }
     })
@@ -269,66 +273,66 @@ function addPhoto() {
         if (inputPhoto.files) {
             photoValide = true
             if (titreValide === true && photoValide === true) {
-                postPhoto()
+                modalEndBtn.classList.remove("arret")
+                modalEndBtn.addEventListener("click", postPhoto)
             }
         } else {
             photoValide = false
-            btnValider.classList.add("arret")
+            modalEndBtn.classList.add("arret")
 
         }
 
     })
 }
-
+// fonction pour poster la photo
 function postPhoto() {
-    const btnValider = document.querySelector(".modal-end-button")
-    btnValider.classList.remove("arret")
+    
     const inputPhoto = document.querySelector(".ImgAddDiv input")
-    let token = userIn
+    let token = tokenIn
     let form = document.getElementById("addForm")
-    btnValider.addEventListener("click", () => {
+  
 
-        const formData = new FormData(form)
+    const formData = new FormData(form)
 
 
-        formData.append("image", inputPhoto.files[0])
+    formData.append("image", inputPhoto.files[0])
 
-        fetch("http://localhost:5678/api/works", {
-            method: "POST",
-            headers: {
-                "Authorization": `Bearer ${token}`,
-            },
-            body: formData
+    fetch("http://localhost:5678/api/works", {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${token}`,
+        },
+        body: formData
+    }
+    ).then(async res => {
+        if (res.status === 400) {
+            let messageErreur = document.createElement("p")
+            messageErreur.innerText = "Votre requète est mal formulée"
+            form.appendChild(messageErreur)
+
+
+        } else if (res.status === 401) {
+            let messageErreur = document.createElement("p")
+            messageErreur.innerText = "Vous n'etes pas authorisé à ajouter une image"
+            form.appendChild(messageErreur)
+
+        } else if (res.status === 500) {
+            let messageErreur = document.createElement("p")
+            messageErreur.innerText = "Un Problème serveur a eu lieu"
+            form.appendChild(messageErreur)
+
         }
-        ).then(async res => {
-            if (res.status === 400) {
-                let messageErreur = document.createElement("p")
-                messageErreur.innerText = "Votre requète est mal formulée"
-                form.appendChild(messageErreur)
+        else if (res.status === 201) {
+            const reponse = await fetch("http://localhost:5678/api/works")
+            const newWorks = await reponse.json()
+            genererWorks(newWorks)
+            works = newWorks
+            location.href = "./index.html"
 
-
-            } else if (res.status === 401) {
-                let messageErreur = document.createElement("p")
-                messageErreur.innerText = "Vous n'etes pas authorisé à ajouter une image"
-                form.appendChild(messageErreur)
-
-            } else if (res.status === 500) {
-                let messageErreur = document.createElement("p")
-                messageErreur.innerText = "Un Problème serveur a eu lieu"
-                form.appendChild(messageErreur)
-
-            }
-            else if (res.status === 201) {
-                const reponse = await fetch("http://localhost:5678/api/works")
-                const newWorks = await reponse.json()
-                genererWorks(newWorks)
-                works = newWorks
-                location.href = "./index.html"
-
-            }
         }
-        )
+    }
+    )
 
-    })
+    
 
 }
