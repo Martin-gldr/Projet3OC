@@ -1,10 +1,11 @@
 import { genererWorks } from "./projets.js"
 
 // données 
-const reponseCategories = await fetch("http://localhost:5678/api/categories")
+let url = "http://localhost:5678/api/"
+const reponseCategories = await fetch(url+"categories")
 const categories = await reponseCategories.json()
 
-let reponse = await fetch("http://localhost:5678/api/works")
+let reponse = await fetch(url+"works")
 let works = await reponse.json();
 const userId = window.localStorage.getItem("id")
 
@@ -18,11 +19,11 @@ export function openModal() {
     const modal = document.querySelector(".modal")
     modal.style.display = null
     const modalTitle = document.querySelector(".modal h2")
-    modalTitle.innerText = "Gallerie Photo"
+    modalTitle.innerText = "Galerie photo"
     const modalBody = document.getElementById("modalBody")
     modalBody.classList.add("galleryImage")
     modal.addEventListener("click", closeModal)
-    modal.querySelector(".modal-wrapper").addEventListener("click", stopPropagation)
+    modal.querySelector(".outer-wrapper").addEventListener("click", stopPropagation)
     const modalEndBtn = document.querySelector(".modal-end-button")
     modalEndBtn.innerText = "Ajouter une photo"
 
@@ -85,10 +86,10 @@ export function removePhoto() {
     for (let i = 0; i < removeButtonListe.length; i++) {
         removeButtonListe[i].addEventListener("click", () => {
             let removeID = removeButtonListe[i].id
-            let url = "http://localhost:5678/api/works/" + removeID
+            let Url = url+"works/" + removeID
             let token = tokenIn
 
-            fetch(url, {
+            fetch(Url, {
                 method: "DELETE",
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -97,9 +98,15 @@ export function removePhoto() {
 
             }).then(async res => {
                 if (res.status === 401) {
-                   
+                    const galleryImage = document.getElementById("modalBody")
+                    let messageErreur = document.createElement("p")
+                    messageErreur.innerText = "Erreur de supression"
+                    galleryImage.appendChild(messageErreur)
                 } else if (res.status === 500) {
-                    
+                    const galleryImage = document.getElementById("modalBody")
+                    let messageErreur = document.createElement("p")
+                    messageErreur.innerText = "Le serveur a eu un problème "
+                    galleryImage.appendChild(messageErreur)
                 } else if (res.status < 300) {
                     const reponse = await fetch("http://localhost:5678/api/works")
                     const newWorks = await reponse.json();
@@ -132,7 +139,7 @@ export function openAddModal() {
     clearModal()
     // affichage
     const modalTitle = document.querySelector(".modal h2")
-    modalTitle.innerHTML = 'Ajout Photo'
+    modalTitle.innerHTML = 'Ajout photo'
     const modalEndBtn = document.querySelector(".modal-end-button")
     modalEndBtn.removeEventListener("click", openAddModal)
    
@@ -297,7 +304,7 @@ function postPhoto() {
 
     formData.append("image", inputPhoto.files[0])
 
-    fetch("http://localhost:5678/api/works", {
+    fetch(url+"works", {
         method: "POST",
         headers: {
             "Authorization": `Bearer ${token}`,
@@ -323,7 +330,7 @@ function postPhoto() {
 
         }
         else if (res.status === 201) {
-            const reponse = await fetch("http://localhost:5678/api/works")
+            const reponse = await fetch(url+"works")
             const newWorks = await reponse.json()
             genererWorks(newWorks)
             works = newWorks

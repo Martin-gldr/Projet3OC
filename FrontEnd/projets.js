@@ -2,12 +2,13 @@
 import { genererModalPhoto, openModal, removePhoto } from "./modal.js"
 
 // import des projet en BDD => json
-let reponse = await fetch("http://localhost:5678/api/works")
+let url = "http://localhost:5678/api/"
+let reponse = await fetch(url+"works")
 let works = await reponse.json()
 
 
 // recupération des catégories 
-const reponseCategories = await fetch("http://localhost:5678/api/categories")
+const reponseCategories = await fetch(url+"categories")
 const categories = await reponseCategories.json()
 
 
@@ -117,7 +118,7 @@ if (tokenIn === null) {
 
     // Gestion Modal 
     modifierLink.addEventListener("click", async () => {
-        const reponse = await fetch("http://localhost:5678/api/works")
+        const reponse = await fetch(url+"works")
         const newWorks = await reponse.json()
         openModal()
         genererModalPhoto(newWorks)

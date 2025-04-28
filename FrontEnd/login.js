@@ -1,4 +1,4 @@
-
+let url = "http://localhost:5678/api/"
 const divMsgErreur = document.querySelector(".erreur")
 const formulaireLogin = document.querySelector("#formLogin")
 
@@ -11,7 +11,7 @@ formulaireLogin.addEventListener("submit", function (event) {
     }
     const chargeUtile = JSON.stringify(login)
     // gestion envoie des données
-    fetch("http://localhost:5678/api/users/login", {
+    fetch(url+"users/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: chargeUtile
