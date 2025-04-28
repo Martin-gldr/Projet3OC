@@ -671,6 +671,7 @@ nav ul #loginStrong {
 	top: 43px;
 	z-index: 1;
 	color: #AFAFAF;
+	pointer-events: none;
 }
 
 

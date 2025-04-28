@@ -13,6 +13,8 @@ console.log(userIn)
 
 
 // fonctions pour la modal
+
+// ouverture de la modal gallerie
 export function openModal() {
     const modal = document.querySelector(".modal")
     modal.style.display = null
@@ -249,28 +251,28 @@ function addPhoto() {
     const inputTitre = document.getElementById("title")
     const inputPhoto = document.querySelector(".ImgAddDiv input")
     const btnValider = document.querySelector(".modal-end-button")
-    let i = 0
-    let e = 0
+    let titreValide = false
+    let photoValide = false
 
     inputTitre.addEventListener("change", () => {
         if (inputTitre.value === "") {
-            i = 0
+            titreValide = false
             btnValider.classList.add("arret")
         } else if (inputTitre.value != "") {
-            i = 1
-            if (i === 1 && e === 1) {
+            titreValide = true
+            if (titreValide === true && photoValide === true) {
                 postPhoto()
             }
         }
     })
     inputPhoto.addEventListener("change", () => {
         if (inputPhoto.files) {
-            e = 1
-            if (i === 1 && e === 1) {
+            photoValide = true
+            if (titreValide === true && photoValide === true) {
                 postPhoto()
             }
         } else {
-            e = 0
+            photoValide = false
             btnValider.classList.add("arret")
 
         }
@@ -307,7 +309,7 @@ function postPhoto() {
 
             } else if (res.status === 401) {
                 let messageErreur = document.createElement("p")
-                messageErreur.innerText = "Vous n'etes pas authorisé a ajouter une image"
+                messageErreur.innerText = "Vous n'etes pas authorisé à ajouter une image"
                 form.appendChild(messageErreur)
 
             } else if (res.status === 500) {
