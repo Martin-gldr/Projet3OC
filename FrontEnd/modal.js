@@ -252,6 +252,7 @@ function previewImage(e) {
         }
 
         reader.readAsDataURL(input.files[0])
+        console.log(input.files[0].size)
     }
 
 }
@@ -260,6 +261,7 @@ function addPhoto() {
     const inputTitre = document.getElementById("title")
     const inputPhoto = document.querySelector(".ImgAddDiv input")
     const modalEndBtn = document.querySelector(".modal-end-button")
+    const form = document.getElementById("addForm")
     let titreValide = false
     let photoValide = false
 
@@ -277,16 +279,20 @@ function addPhoto() {
         }
     })
     inputPhoto.addEventListener("change", () => {
-        if (inputPhoto.files) {
+        if (inputPhoto.files[0].size<4194304) {
+
             photoValide = true
             if (titreValide === true && photoValide === true) {
                 modalEndBtn.classList.remove("arret")
                 modalEndBtn.addEventListener("click", postPhoto)
             }
-        } else {
-            photoValide = false
-            modalEndBtn.classList.add("arret")
+        } else if(inputPhoto.files[0].size>4194304) {
+            let messageErreur = document.createElement("p")
+            messageErreur.innerText = "image trop lourde"
+            form.appendChild(messageErreur)
 
+        } else {photoValide = false
+            modalEndBtn.classList.add("arret")
         }
 
     })
